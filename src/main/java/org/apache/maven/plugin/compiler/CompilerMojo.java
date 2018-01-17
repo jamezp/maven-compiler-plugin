@@ -124,6 +124,14 @@ public class CompilerMojo
     @Parameter
     private boolean multiReleaseOutput;
 
+    /**
+     * A list of additional filesystem paths to include on the compile class path beyond the resolved dependency
+     * set.  This is useful in conjunction with the dependency plugin for cases where there are items that must not
+     * be included in other phases of the build, but are nevertheless required during compilation.
+     */
+    @Parameter
+    private List<String> additionalClasspathElements = new ArrayList<>();
+
     @Component
     private LocationManager locationManager;
 
@@ -280,7 +288,9 @@ public class CompilerMojo
                         }
                     }
                 }
-                
+
+                classpathElements.addAll( additionalClasspathElements );
+
                 for ( File file : resolvePathsResult.getModulepathElements().keySet() )
                 {
                     modulepathElements.add( file.getPath() );
@@ -301,7 +311,10 @@ public class CompilerMojo
         }
         else
         {
-            classpathElements = compilePath;
+            List<String> list = new ArrayList<>( compilePath.size() + additionalClasspathElements.size() );
+            list.addAll( compilePath );
+            list.addAll( additionalClasspathElements );
+            classpathElements = list;
             modulepathElements = Collections.emptyList();
         }
     }

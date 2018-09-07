@@ -80,6 +80,7 @@ import org.codehaus.plexus.compiler.util.scan.mapping.SingleTargetSourceMapping;
 import org.codehaus.plexus.compiler.util.scan.mapping.SourceMapping;
 import org.codehaus.plexus.compiler.util.scan.mapping.SuffixMapping;
 import org.codehaus.plexus.languages.java.jpms.JavaModuleDescriptor;
+import org.codehaus.plexus.languages.java.jpms.LocationManager;
 import org.codehaus.plexus.languages.java.version.JavaVersion;
 
 /**
@@ -503,6 +504,9 @@ public abstract class AbstractCompilerMojo
      */
     @Component
     private ResolutionErrorHandler resolutionErrorHandler;
+    
+    // @Inject + Java9+ + maven-plugin-testing-harness-2.1 doesn't work 
+    private LocationManager locationManager = new LocationManager();
 
     protected abstract SourceInclusionScanner getSourceInclusionScanner( int staleMillis );
 
@@ -1749,6 +1753,11 @@ public abstract class AbstractCompilerMojo
         }
 
         return pomProperties.getProperty( "version" );
+    }
+    
+    protected LocationManager getLocationManager()
+    {
+        return locationManager;
     }
 
     public void setTarget( String target )

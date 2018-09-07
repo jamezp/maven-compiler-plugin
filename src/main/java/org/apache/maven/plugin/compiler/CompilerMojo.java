@@ -33,7 +33,6 @@ import java.util.Map.Entry;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -47,10 +46,9 @@ import org.codehaus.plexus.compiler.util.scan.SimpleSourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.SourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
 import org.codehaus.plexus.languages.java.jpms.JavaModuleDescriptor;
-import org.codehaus.plexus.languages.java.jpms.LocationManager;
 import org.codehaus.plexus.languages.java.jpms.ResolvePathsRequest;
 import org.codehaus.plexus.languages.java.jpms.ResolvePathsResult;
-import org.codehaus.plexus.languages.java.jpms.ResolvePathsResult.ModuleNameSource;
+import org.codehaus.plexus.languages.java.jpms.ModuleNameSource;
 
 /**
  * Compiles application sources
@@ -124,9 +122,6 @@ public class CompilerMojo
      */
     @Parameter
     private boolean multiReleaseOutput;
-
-    @Component
-    private LocationManager locationManager;
 
     private List<String> classpathElements;
 
@@ -236,7 +231,7 @@ public class CompilerMojo
                     request.setJdkHome( new File( ( (DefaultJavaToolChain) toolchain ).getJavaHome() ) );
                 }
 
-                resolvePathsResult = locationManager.resolvePaths( request );
+                resolvePathsResult = getLocationManager().resolvePaths( request );
                 
                 for ( Entry<File, Exception> pathException : resolvePathsResult.getPathExceptions().entrySet() )
                 {

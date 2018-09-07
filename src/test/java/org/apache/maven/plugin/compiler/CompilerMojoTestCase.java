@@ -46,6 +46,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.plugin.testing.stubs.ArtifactStub;
 import org.apache.maven.project.MavenProject;
+import org.codehaus.plexus.ContainerConfiguration;
 
 public class CompilerMojoTestCase
     extends AbstractMojoTestCase
@@ -71,6 +72,13 @@ public class CompilerMojoTestCase
             source = "6";
             target = "6";
         }
+    }
+    
+    @Override
+    protected ContainerConfiguration setupContainerConfiguration()
+    {
+        // to support @Inject while using maven-plugin-testing-harness-2.1 
+        return super.setupContainerConfiguration().setClassPathScanning( true );
     }
     
     /**

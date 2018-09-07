@@ -34,7 +34,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -45,7 +44,6 @@ import org.codehaus.plexus.compiler.util.scan.SimpleSourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.SourceInclusionScanner;
 import org.codehaus.plexus.compiler.util.scan.StaleSourceScanner;
 import org.codehaus.plexus.languages.java.jpms.JavaModuleDescriptor;
-import org.codehaus.plexus.languages.java.jpms.LocationManager;
 import org.codehaus.plexus.languages.java.jpms.ResolvePathsRequest;
 import org.codehaus.plexus.languages.java.jpms.ResolvePathsResult;
 
@@ -161,9 +159,6 @@ public class TestCompilerMojo
     @Parameter( defaultValue = "${project.testClasspathElements}", readonly = true )
     private List<String> testPath;
 
-    @Component
-    private LocationManager locationManager;
-
     private Map<String, JavaModuleDescriptor> pathElements;
     
     private Collection<String> classpathElements;
@@ -247,7 +242,7 @@ public class TestCompilerMojo
                     request.setJdkHome( ( (DefaultJavaToolChain) toolchain ).getJavaHome() );
                 }
 
-                result = locationManager.resolvePaths( request );
+                result = getLocationManager().resolvePaths( request );
                 
                 for ( Entry<String, Exception> pathException : result.getPathExceptions().entrySet() )
                 {
@@ -291,7 +286,7 @@ public class TestCompilerMojo
                     request.setJdkHome( ( (DefaultJavaToolChain) toolchain ).getJavaHome() );
                 }
 
-                result = locationManager.resolvePaths( request );
+                result = getLocationManager().resolvePaths( request );
             }
             catch ( IOException e )
             {

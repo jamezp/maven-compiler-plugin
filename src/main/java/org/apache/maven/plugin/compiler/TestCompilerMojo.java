@@ -419,8 +419,8 @@ public class TestCompilerMojo
             else
             {
                 modulepathElements = Collections.emptyList();
-                List<String> list = new ArrayList<>( compilePath.size() + additionalClasspathElements.size() );
-                list.addAll( compilePath );
+                List<String> list = new ArrayList<>( testPath.size() + additionalClasspathElements.size() );
+                list.addAll( testPath );
                 list.addAll( additionalClasspathElements );
                 classpathElements = list;
             }
